@@ -2,13 +2,26 @@ import React from 'react';
 import { useState } from 'react';
 import { useRef } from 'react';
 import { NumberInput, Button, Center, List, Title, Space, TextInput } from '@mantine/core';
+import { invoke } from '@tauri-apps/api/tauri';
+
+declare global {
+    interface Window {
+        __TAURI__:any;
+    }
+  }
+
+let __TAURI__ = window.__TAURI__;
 
 function Setup() {
+
+  // Be sure to set `build.withGlobalTauri` in `tauri.conf.json` to true
+  const invoke = __TAURI__.invoke;
 
   const [step, setStep] = useState(1);
   let title;
   let description;
   let entry;
+  let ram = invoke('get_ram').toString();
 
   const nameRef = useRef<HTMLInputElement>(null);
 
@@ -34,11 +47,19 @@ function Setup() {
           defaultValue={4}
           placeholder="4"
           label="RAM"
-          description="Value in Gigabytes. Recommend min 4gb."
+          description="Value in Gigabytes. Recommended min 4gb."
           required
           max={32}
           min={2}
         />
+      );
+      break;
+    }
+    case 3: {
+      title = "Ram test";
+      description = "Querying ram";
+      entry = (
+        <p>{ram}</p>
       );
       break;
     }
@@ -52,6 +73,7 @@ function Setup() {
       if (nameRef.current != null) {
         if (nameRef.current.value === "") {
           return;
+          // Need to add actual registration of values
         }
       }
     }
