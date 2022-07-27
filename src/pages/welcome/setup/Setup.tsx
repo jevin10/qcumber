@@ -21,7 +21,7 @@ function Setup() {
   let title;
   let description;
   let entry;
-  let ram = invoke('get_ram').toString();
+  const ram = invoke('get_ram').toString();
 
   const nameRef = useRef<HTMLInputElement>(null);
 
