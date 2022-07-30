@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useRef } from 'react';
 import { NumberInput, Button, Center, List, Title, Space, TextInput} from '@mantine/core';
-//import { invoke } from '@tauri-apps/api/tauri';
+import { invoke } from '@tauri-apps/api/tauri';
 import { useForm, UseFormReturnType } from '@mantine/form';
 
 declare global {
@@ -25,22 +25,34 @@ function Setup() {
   let entry;
   const [ram, setRam] = useState(1);
 
-
   interface FormValues {
     name: string;
     ramSpec: number;
   }
   
   function NameInput({form}: { form: UseFormReturnType<FormValues> }) {
-      return <TextInput 
-        placeholder="my-first-server"
-        label="Name"
-        ref={nameRef}
-        required
-        autoFocus='true'
-        {...form.getInputProps('name')} 
-      />
-    }
+    return <TextInput 
+      placeholder="my-first-server"
+      label="Name"
+      ref={nameRef}
+      required
+      autoFocus='true'
+      {...form.getInputProps('name')} 
+    />;
+  }
+
+  function RamInput({form}: { form: UseFormReturnType<FormValues> }) {
+    return <NumberInput
+      defaultValue={4}
+      placeholder="4"
+      label="RAM"
+      min={1}
+      max={ram}
+      description="Recommended min 4gb."
+      required
+      {...form.getInputProps('name')}  
+    />;
+  }
 
   const form = useForm<FormValues>({ initialValues: { name: '', ramSpec: 4, } });
   
@@ -63,14 +75,7 @@ function Setup() {
       title = "Specifications";
       description = "Specify the amount of RAM to allocate.";
       entry = (
-        <NumberInput
-          defaultValue={4}
-          placeholder="4"
-          label="RAM"
-          max={ram}
-          description="Recommended min 4gb."
-          required
-        />
+        <RamInput form={form} />
       );
       break;
     }
@@ -80,6 +85,11 @@ function Setup() {
   function clickEvent() {
     if(step >= 4) {
       return;
+    }
+    if(step === 1) {
+      if(form.values.name.length === 0) {
+        return;
+      }
     }
     setStep(step+1);
   }
