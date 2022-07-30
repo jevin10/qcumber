@@ -52,11 +52,26 @@ function Setup() {
       max={totalRam}
       description="Recommended min 4gb."
       required
-      {...form.getInputProps('name')}  
+      {...form.getInputProps('ramSpec')}  
     />;
   }
 
   const form = useForm<FormValues>({ initialValues: { name: '', ramSpec: 4, } });
+
+  useEffect(() => {
+    const storedValue = window.localStorage.getItem('user-form');
+    if (storedValue) {
+      try {
+        form.setValues(JSON.parse(window.localStorage.getItem('user-form')!));
+      } catch (e) {
+        console.log('Failed to parse stored value');
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem('user-form', JSON.stringify(form.values));
+  }, [form.values]);
   
   useEffect(() => {
     invoke('get_ram').then((message: any) => (
