@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@mantine/core": "^5.0.0",
+    "@mantine/form": "^5.0.0",
     "@mantine/hooks": "^5.0.0",
     "@mantine/next": "^5.0.0",
     "@tauri-apps/api": "^1.0.2",

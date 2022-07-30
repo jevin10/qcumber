@@ -1,8 +1,9 @@
 import React from 'react';
 import { useState } from 'react';
 import { useRef } from 'react';
-import { NumberInput, Button, Center, List, Title, Space, TextInput } from '@mantine/core';
+import { NumberInput, Button, Center, List, Title, Space, TextInput} from '@mantine/core';
 import { invoke } from '@tauri-apps/api/tauri';
+import { useForm, UseFormReturnType } from '@mantine/form';
 
 declare global {
     interface Window {
@@ -13,6 +14,8 @@ declare global {
 let __TAURI__ = window.__TAURI__;
 
 function Setup() {
+  
+  const nameRef = useRef<HTMLInputElement>(null);
 
   // Be sure to set `build.withGlobalTauri` in `tauri.conf.json` to true
   const invoke = __TAURI__.invoke;
@@ -21,22 +24,36 @@ function Setup() {
   let title;
   let description;
   let entry;
-  const [ram, setRam] = useState(1);
-  invoke('get_ram').then((message: any) => (setRam(message)));
+  // const [ram, setRam] = useState(1);
 
-  const nameRef = useRef<HTMLInputElement>(null);
+  interface FormValues {
+    name: string;
+    ramSpec: number;
+  }
 
+  function NameInput({form}: { form: UseFormReturnType<FormValues> }) {
+      return <TextInput 
+        placeholder="my-first-server"
+        label="Name"
+        ref={nameRef}
+        autoFocus='true'
+        required
+        {...form.getInputProps('name')} 
+      />
+    }
+
+ /**  invoke('get_ram').then((message: any) => (
+    setRam(Math.round(message/(1024*1024)))
+    ));
+*/
+  const form = useForm<FormValues>({ initialValues: { name: '', ramSpec: 4, } });
+ 
   switch(step) {
     case 1: {
       title = "Server Name";
       description = "Choose a name for your server.";
       entry = (    
-        <TextInput
-          placeholder="my-first-server"
-          label="Name"
-          ref={nameRef}
-          required
-        />
+        <NameInput form={form} />
       );
       break;
     }
@@ -48,35 +65,20 @@ function Setup() {
           defaultValue={4}
           placeholder="4"
           label="RAM"
-          description="Value in Gigabytes. Recommended min 4gb."
+          description="Recommended min 4gb."
           required
-          max={32}
+          // max={ram}
           min={2}
         />
       );
       break;
     }
-    case 3: {
-      title = "Ram test";
-      description = "Querying ram";
-      entry = (
-        <p>{ram}</p>
-      );
-      break;
-    }
+    default: break;
   }
 
   function clickEvent() {
     if(step >= 4) {
       return;
-    }
-    if(step === 1) {
-      if (nameRef.current != null) {
-        if (nameRef.current.value === "") {
-          return;
-          // Need to add actual registration of values
-        }
-      }
     }
     setStep(step+1);
   }
