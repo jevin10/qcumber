@@ -8,6 +8,7 @@ import {
 import Home from "./pages/home/Home"
 import Welcome from "./pages/welcome/Welcome"
 import Setup from "./pages/welcome/setup/Setup"
+import SetupServer from "./pages/welcome/setup/SetupServer"
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="welcome">
             <Route index element={<Welcome />} />
             <Route path="setup" element={<Setup />} />
+            <Route path="setupServer" element={<SetupServer />} />
           </Route>
         </Routes>
       </Router>

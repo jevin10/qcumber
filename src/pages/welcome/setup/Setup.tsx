@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import { NumberInput, Button, Center, List, Title, Space, TextInput, Group } from '@mantine/core';
 import { invoke } from '@tauri-apps/api/tauri';
 import { useForm, UseFormReturnType } from '@mantine/form';
+import { useNavigate } from 'react-router-dom';
 
 declare global {
     interface Window {
@@ -14,6 +15,7 @@ declare global {
 let __TAURI__ = window.__TAURI__;
 
 function Setup() {
+  let navigate = useNavigate();
   const nameRef = useRef<HTMLInputElement>(null);
 
   // Be sure to set `build.withGlobalTauri` in `tauri.conf.json` to true
@@ -103,7 +105,7 @@ function Setup() {
         <p>
           <b>Server Name:</b> {name}
           <br/>
-          <b>Server Ram:</b> {ram}gb
+          <b>Server Ram:</b> {ram} gb
         </p>
       );
       break;
@@ -130,6 +132,9 @@ function Setup() {
     }
     if(step ===2) {
       setRam(form.values.ramSpec);
+    }
+    if(step === 3) {
+      navigate("/welcome/setupServer");
     }
     setStep(step+1);
   }
