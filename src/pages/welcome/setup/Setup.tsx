@@ -21,7 +21,8 @@ function Setup() {
   let title;
   let description;
   let entry;
-  const ram = invoke('get_ram').toString();
+  const [ram, setRam] = useState(1);
+  invoke('get_ram').then((message: any) => (setRam(message)));
 
   const nameRef = useRef<HTMLInputElement>(null);
 
