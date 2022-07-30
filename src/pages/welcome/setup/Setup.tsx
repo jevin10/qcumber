@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useRef } from 'react';
-import { NumberInput, Button, Center, List, Title, Space, TextInput} from '@mantine/core';
+import { NumberInput, Button, Center, List, Title, Space, TextInput, Group } from '@mantine/core';
 import { invoke } from '@tauri-apps/api/tauri';
 import { useForm, UseFormReturnType } from '@mantine/form';
 
@@ -96,7 +96,14 @@ function Setup() {
     default: break;
   }
 
-  function clickEvent() {
+  function backClickEvent() {
+    if(step === 1) {
+      return;
+    }
+    setStep(step-1);
+  }
+
+  function nextClickEvent() {
     if(step >= 4) {
       return;
     }
@@ -126,9 +133,14 @@ function Setup() {
             {entry}
           </List.Item>
           <Space h="md" />
-          <Button variant="default" compact onClick={clickEvent}>
-            Next 
-          </Button>
+          <Group position="apart">
+            <Button variant="default" compact onClick={backClickEvent}>
+              Back
+            </Button>
+            <Button variant="default" compact onClick={nextClickEvent}>
+              Next
+            </Button>
+          </Group>
         </List>
       </Center>
     </div>
