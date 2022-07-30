@@ -1,8 +1,8 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRef } from 'react';
 import { NumberInput, Button, Center, List, Title, Space, TextInput} from '@mantine/core';
-import { invoke } from '@tauri-apps/api/tauri';
+//import { invoke } from '@tauri-apps/api/tauri';
 import { useForm, UseFormReturnType } from '@mantine/form';
 
 declare global {
@@ -14,7 +14,6 @@ declare global {
 let __TAURI__ = window.__TAURI__;
 
 function Setup() {
-  
   const nameRef = useRef<HTMLInputElement>(null);
 
   // Be sure to set `build.withGlobalTauri` in `tauri.conf.json` to true
@@ -24,29 +23,32 @@ function Setup() {
   let title;
   let description;
   let entry;
-  // const [ram, setRam] = useState(1);
+  const [ram, setRam] = useState(1);
+
 
   interface FormValues {
     name: string;
     ramSpec: number;
   }
-
+  
   function NameInput({form}: { form: UseFormReturnType<FormValues> }) {
       return <TextInput 
         placeholder="my-first-server"
         label="Name"
         ref={nameRef}
-        autoFocus='true'
         required
+        autoFocus='true'
         {...form.getInputProps('name')} 
       />
     }
 
- /**  invoke('get_ram').then((message: any) => (
-    setRam(Math.round(message/(1024*1024)))
-    ));
-*/
   const form = useForm<FormValues>({ initialValues: { name: '', ramSpec: 4, } });
+  
+  useEffect(() => {
+    invoke('get_ram').then((message: any) => (
+      setRam(Math.round(message/(1024*1024)))
+    ));
+  }, []);
  
   switch(step) {
     case 1: {
@@ -65,10 +67,9 @@ function Setup() {
           defaultValue={4}
           placeholder="4"
           label="RAM"
+          max={ram}
           description="Recommended min 4gb."
           required
-          // max={ram}
-          min={2}
         />
       );
       break;
