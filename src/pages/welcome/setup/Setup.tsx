@@ -23,6 +23,8 @@ function Setup() {
   let title;
   let description;
   let entry;
+  const [totalRam, setTotalRam] = useState(1);
+  const [name, setName] = useState('');
   const [ram, setRam] = useState(1);
 
   interface FormValues {
@@ -47,7 +49,7 @@ function Setup() {
       placeholder="4"
       label="RAM"
       min={1}
-      max={ram}
+      max={totalRam}
       description="Recommended min 4gb."
       required
       {...form.getInputProps('name')}  
@@ -58,7 +60,7 @@ function Setup() {
   
   useEffect(() => {
     invoke('get_ram').then((message: any) => (
-      setRam(Math.round(message/(1024*1024)))
+      setTotalRam(Math.round(message/(1024*1024)))
     ));
   }, []);
  
@@ -79,6 +81,18 @@ function Setup() {
       );
       break;
     }
+    case 3: {
+      title = "Finalize";
+      description = "Double check your settings and we're ready to roll!";
+      entry = (
+        <p>
+          <b>Server Name:</b> {name}
+          <br/>
+          <b>Server Ram:</b> {ram}gb
+        </p>
+      );
+      break;
+    }
     default: break;
   }
 
@@ -90,6 +104,10 @@ function Setup() {
       if(form.values.name.length === 0) {
         return;
       }
+      setName(form.values.name);
+    }
+    if(step ===2) {
+      setRam(form.values.ramSpec);
     }
     setStep(step+1);
   }
