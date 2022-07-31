@@ -1,2 +1,2 @@
-/** Generates the startup script for the Minecraft server. */
-pub mod generate_init;
+/** Runs the startup script for the Minecraft server. */
+pub mod init;
