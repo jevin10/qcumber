@@ -115,6 +115,7 @@ function Setup() {
 
   function backClickEvent() {
     if(step === 1) {
+      navigate("/welcome");
       return;
     }
     setStep(step-1);

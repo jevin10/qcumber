@@ -3,8 +3,6 @@
     windows_subsystem = "windows"
 )]
 
-use system_reader::get_total_memory;
-
 fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![get_ram])
@@ -12,7 +10,12 @@ fn main() {
         .expect("error while running tauri application");
 }
 
-pub mod system_reader;
+/** Operations relating to handling of the system the server runs on*/
+pub mod system;
+/** Functions relating to handling of the server configurations*/
+pub mod server;
+
+use system::system_reader::get_total_memory;
 
 #[tauri::command]
 fn get_ram() -> u64 {
