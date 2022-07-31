@@ -10,11 +10,8 @@ fn main() {
         .expect("error while running tauri application");
 }
 
-/** Operations relating to handling of the system the server runs on*/
-pub mod system;
-/** Functions relating to handling of the server configurations*/
-pub mod server;
 
+use app::system;
 use system::system_reader::get_total_memory;
 
 #[tauri::command]
