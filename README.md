@@ -6,9 +6,9 @@ Requires [Tauri](https://tauri.app/).
 
 First, install the required dependencies:
 ```
-[qcumber]$ npm install
+npm install
 ```
 Then, enter
 ```
-[qcumber]$ npm run tauri dev
+npm run tauri dev
 ```
