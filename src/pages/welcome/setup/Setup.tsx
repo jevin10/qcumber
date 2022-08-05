@@ -76,7 +76,7 @@ function Setup() {
   }, [form.values]);
 
   useEffect(() => {
-    invoke('build_server');
+    invoke('init_program');
   }, []);
   
   useEffect(() => {
@@ -139,6 +139,7 @@ function Setup() {
       setRam(form.values.ramSpec);
     }
     if(step === 3) {
+      // create json "server settings"
       navigate("/welcome/setupServer");
     }
     setStep(step+1);
