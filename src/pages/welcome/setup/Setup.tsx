@@ -74,6 +74,10 @@ function Setup() {
   useEffect(() => {
     window.localStorage.setItem('user-form', JSON.stringify(form.values));
   }, [form.values]);
+
+  useEffect(() => {
+    invoke('build_server');
+  }, []);
   
   useEffect(() => {
     invoke('get_ram').then((message: any) => (

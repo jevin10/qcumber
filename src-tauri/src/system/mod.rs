@@ -14,7 +14,7 @@ pub fn get_path(target: &str) -> PathBuf {
     environment_path
     }
   };
-  path.push("/qcumber");
+  path.push(".qcumber");
   match target {
     "data_dir" => path,
     &_ => path,
