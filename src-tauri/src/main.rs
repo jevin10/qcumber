@@ -5,7 +5,7 @@
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![get_ram, init_program, create_build_context])
+        .invoke_handler(tauri::generate_handler![get_ram, init_program, create_build_context, write_build_context])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -27,5 +27,10 @@ fn init_program() {
 #[tauri::command]
 fn create_build_context() -> bool {
   server::init::create_build_context()
+}
+
+#[tauri::command]
+fn write_build_context(invoke_message: u64) -> bool {
+  server::init::write_build_context(invoke_message)
 }
 // ^ TODO: ACTUALLY CALL AND USE THIS AND TEST IT IN THE APP

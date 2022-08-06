@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Center, List, Title, Space } from '@mantine/core';
+import { invoke } from '@tauri-apps/api/tauri';
 
+let __TAURI__ = window.__TAURI__;
 
 function SetupServer() {
+
+  const invoke = __TAURI__.invoke;
+
+  useEffect(() => {
+    invoke('create_build_context');
+  }, []);
 
   return (
     <div className="setupServer">
